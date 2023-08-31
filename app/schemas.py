@@ -40,6 +40,10 @@ class BookBase(BaseModel):
         title="Pages",
         description="Number of book pages.",
         )
+    synopsis: str = Field(
+        title="Synopsis",
+        description="Synopsis of the book"
+        )
     publisher: str = Field(
         title="Publisher",
         description="Publisher of the book.",
@@ -79,6 +83,11 @@ class BookSchemaUpdate(BaseModel):
         title="Pages",
         description="Number of book pages.",
         )
+    synopsis: str | None = Field(
+        default=None,
+        title="Synopsis",
+        description="Synopsis of the book"
+        )
     publisher: str | None = Field(
         default=None,
         title="Publisher",
@@ -108,6 +117,20 @@ class AuthorBase(BaseModel):
         description="Name of the author.",
         max_length=255
         )
+    birth_date: date = Field(
+        default=datetime(year=1970, month=1, day=1),
+        title="Birthdate",
+        description="Birthdate of author."
+        )
+    nationalty: str = Field(
+        title="Nationality",
+        description="Nationality of the author.",
+        max_length=255
+        )
+    biography: str = Field(
+        title="Biography",
+        description="Biography of the author."
+        )
     timestamp: datetime = Field(
         default=datetime.now(),
         title="Timestamp",
@@ -126,6 +149,22 @@ class AuthorSchemaUpdate(BaseModel):
         description="Name of the author.",
         max_length=255
         )
+    birth_date: date | None = Field(
+        default=datetime(year=1970, month=1, day=1),
+        title="Birthdate",
+        description="Birthdate of author."
+        )
+    nationalty: str | None = Field(
+        default=None,
+        title="Nationality",
+        description="Nationality of the author.",
+        max_length=255
+        )
+    biography: str | None = Field(
+        default=None,
+        title="Biography",
+        description="Biography of the author."
+        )
     _timestamp: datetime | None = PrivateAttr(
         default_factory=datetime.utcnow
     )
@@ -140,6 +179,10 @@ class GenreBase(BaseModel):
         title="Name",
         description="Name of the genre.",
         max_length=255
+        )
+    description: str = Field(
+        title="Description",
+        description="Description of the genre."
         )
     timestamp: datetime = Field(
         default=datetime.utcnow(),
@@ -158,6 +201,11 @@ class GenreSchemaUpdate(BaseModel):
         title="Name",
         description="Name of the genre.",
         max_length=255
+        )
+    description: str | None = Field(
+        default=None,
+        title="Description",
+        description="Description of the genre."
         )
     _timestamp: datetime = PrivateAttr(
         default_factory=datetime.utcnow

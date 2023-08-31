@@ -10,6 +10,7 @@ from sqlalchemy import (
     Date, 
     DateTime,
     ForeignKey,
+    Text
     )
 from sqlalchemy.orm import relationship
 from app.config import Base
@@ -32,6 +33,7 @@ class Book(Base):
     title = Column(String(255), unique=True, nullable=False)
     author_id = Column(String(36), ForeignKey("Authors.uuid"))
     pages = Column(Integer, nullable=False)
+    synopsis = Column(Text, nullable=True)
     publisher = Column(String(255), nullable=True)
     published = Column(Date, default=datetime(2017, 12, 4))
     timestamp = Column(DateTime, default=datetime.utcnow())
@@ -45,6 +47,9 @@ class Author(Base):
 
     uuid = Column(String(36), primary_key=True)
     name = Column(String(255), unique=True, nullable=False)
+    birth_date = Column(Date, default=datetime(year=1970, month=1, day=1))
+    nationality = Column(String(255), nullable=True)
+    biography = Column(Text, nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow())
 
     # create relationship.
@@ -55,6 +60,7 @@ class Genre(Base):
 
     uuid = Column(String(36), primary_key=True)
     name = Column(String(255), unique=True, nullable=False)
+    description = Column(Text, nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow())
 
     # create relationship.
