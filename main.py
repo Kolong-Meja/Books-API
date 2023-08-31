@@ -39,6 +39,10 @@ tags_metadata = [
     {
         "name": "users",
         "description": "--|Operations with users|--"
+    },
+    {
+        "name": "authentications",
+        "description": "--|Operations with authentication|--"
     }
 ]
 

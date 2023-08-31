@@ -308,3 +308,4 @@ class TokenData(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
     username: str | None = None
+    scopes: list[str] = []

@@ -10,6 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from passlib.context import CryptContext
+from fastapi.security import OAuth2PasswordBearer
 
 
 # load all variable from env file.
@@ -38,4 +39,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(schemes=["sha256_crypt", "md5_crypt"])
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+oauth2_schema = OAuth2PasswordBearer(
+    tokenUrl="my_token",
+    scopes={
+        "me": "Read information about the current user.",
+        "items": "Read Items."
+    }
+)

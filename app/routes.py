@@ -5,7 +5,8 @@
 from fastapi import (
     Depends, 
     APIRouter,
-    status
+    status,
+    HTTPException,
     )
 from sqlalchemy.orm import Session
 from app import (
@@ -17,8 +18,13 @@ from app.controllers import (
     book_controller, 
     genre_controller,
     book_genre_controller,
-    user_controller
+    user_controller,
+    authentication_controller
     )
+from fastapi.security import OAuth2PasswordRequestForm
+from typing import Annotated
+from datetime import timedelta
+from app.config import ACCESS_TOKEN_EXPIRE_MINUTES
 
 
 # define route.
@@ -511,4 +517,16 @@ def delete_user(username: str, session: Session = Depends(get_database)):
         session=session
         )
 
-
+"""
+AUTH ROUTES!
+"""
+@router.post("/login", 
+             response_model=schemas.TokenBase, 
+             tags=["authentications"], 
+             status_code=status.HTTP_200_OK
+             )
+def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: Session = Depends(get_database)):
+    return authentication_controller.login(
+        form_data=form_data, 
+        session=session
+        )

@@ -3,21 +3,12 @@
 """CRUD Logic for User"""
 
 from fastapi import HTTPException
-from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app import (
     models, 
     schemas
     )
 from app.config import pwd_context
-
-oauth2_schema = OAuth2PasswordBearer(
-    tokenUrl="my_token",
-    scopes={
-        "me": "Read information about the current user.",
-        "items": "Read Items."
-    }
-)
 
 # hash the password first.
 def password_hash(password: str):
