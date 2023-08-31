@@ -59,4 +59,12 @@ class Genre(Base):
 
     # create relationship.
     books = relationship("Book", secondary="BookGenres", back_populates="genres")
-    
+
+
+class User(Base):
+    __tablename__ = "Users"
+
+    uuid = Column(String(36), primary_key=True)
+    username = Column(String(255), nullable=False, unique=True)
+    password = Column(String(255), nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow())

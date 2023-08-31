@@ -13,7 +13,8 @@ from app.database.query import (
     create_books_table_query,
     create_authors_table_query,
     create_genres_table_query,
-    create_book_genres_table_query
+    create_book_genres_table_query,
+    create_users_table_query
     )
 
 
@@ -34,6 +35,10 @@ tags_metadata = [
     {
         "name": "book_genres",
         "description": "--|Operations with book genres|--"
+    },
+    {
+        "name": "users",
+        "description": "--|Operations with users|--"
     }
 ]
 
@@ -56,4 +61,4 @@ dev_port = int(os.environ.get("APP_DEV_PORT"))
 
 # run the program.
 if __name__ == "__main__":
-    uvicorn.run(app, host=dev_host, port=dev_port)
+    uvicorn.run("__main__:app", host=dev_host, port=dev_port, use_colors=True, reload=True)

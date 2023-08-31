@@ -49,6 +49,16 @@ CREATE TABLE IF NOT EXISTS BookGenres (
     CONSTRAINT FK_GenreBook FOREIGN KEY (genre_id) REFERENCES Genres(uuid) ON DELETE CASCADE
 )
 """
+
+create_users_table_query = """
+CREATE TABLE IF NOT EXISTS Users (
+    uuid VARCHAR(36) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (uuid)
+)
+"""
 # END OF CREATE STATEMENT AREA!
 
 # INSERT STATEMENT AREA!

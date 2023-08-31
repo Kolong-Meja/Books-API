@@ -16,7 +16,8 @@ from app.controllers import (
     author_controller,
     book_controller, 
     genre_controller,
-    book_genre_controller
+    book_genre_controller,
+    user_controller
     )
 
 
@@ -439,3 +440,75 @@ def read_book(genre_id: str, session: Session = Depends(get_database)):
         genre_id=genre_id,
         session=session
         )
+
+"""
+USER ROUTES!
+"""
+@router.get("/api/users", 
+            response_model=list[schemas.UserSchema],
+            tags=["users"],
+            deprecated=False,
+            summary="Read or get users data.",
+            status_code=status.HTTP_200_OK
+            )
+def read_users(session: Session = Depends(get_database), skip: int = 0, limit: int = 100):
+    return user_controller.get_all_users(
+        session=session, 
+        skip=skip, 
+        limit=limit
+        )
+
+@router.post("/api/user", 
+             response_model=schemas.UserSchema, 
+             tags=["users"], 
+             deprecated=False, 
+             summary="Create one user data.", 
+             status_code=status.HTTP_201_CREATED
+             )
+def create_user(user: schemas.UserSchemaCreate, session: Session = Depends(get_database)):
+    return user_controller.create_user(
+        user=user, 
+        session=session
+        )
+
+@router.get("/api/user/{username}", 
+            response_model=schemas.UserSchema, 
+            tags=["users"], 
+            deprecated=False, 
+            summary="Read or get one user data base on username.",
+            status_code=status.HTTP_200_OK
+            )
+def read_user(username: str, session: Session = Depends(get_database)):
+    return user_controller.get_user(
+        username=username, 
+        session=session
+        )
+
+@router.patch("/api/user/{username}", 
+              response_model=schemas.UserSchema, 
+              tags=["users"], 
+              deprecated=False, 
+              summary="Update one user data base on username.", 
+              status_code=status.HTTP_200_OK
+              )
+def update_user(username: str, user: schemas.UserSchemaUpdate, session: Session = Depends(get_database)):
+    return user_controller.update_user(
+        username=username, 
+        user=user, 
+        session=session
+        )
+
+@router.delete("/api/user/{username}", 
+            response_model=schemas.DeleteSchema, 
+            tags=["users"],
+            deprecated=False,
+            summary="Delete one user data.",
+            status_code=status.HTTP_200_OK
+            )
+def delete_user(username: str, session: Session = Depends(get_database)):
+    return user_controller.delete_user(
+        username=username, 
+        session=session
+        )
+
+

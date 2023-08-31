@@ -11,7 +11,8 @@ from pydantic import (
     BaseModel, 
     Field, 
     PrivateAttr, 
-    ConfigDict
+    ConfigDict,
+    ValidationError
     )
 from typing import List
 
@@ -179,6 +180,50 @@ class BookGenreBase(BaseModel):
         description="Datetime of book genre data changes."
         )
 
+class UserBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    _uuid: str = PrivateAttr(
+        default_factory=lambda: uuid_val().hex
+    )
+    username: str = Field(
+        title="Username",
+        description="Name of user that will be used for authentication.",
+        max_length=255
+        )
+    password: str = Field(
+        title="Password",
+        description="Password of user that used for authentication.",
+        max_length=255
+        )
+    timestamp: datetime = Field(
+        default=datetime.utcnow(),
+        title="Timestamp",
+        description="Datetime of user data changes."
+        )
+
+class UserSchemaCreate(UserBase):
+    pass
+
+class UserSchemaUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    username: str | None = Field(
+        default=None,
+        title="Username",
+        description="Name of user that will be used for authentication.",
+        max_length=255
+        )
+    password: str | None = Field(
+        default=None,
+        title="Password",
+        description="Password of user that used for authentication.",
+        max_length=255
+        )
+    _timestamp: datetime = PrivateAttr(
+        default_factory=datetime.utcnow
+        )
+
 class BookSchema(BookBase):
     author: AuthorBase
     genres: List[GenreBase]
@@ -195,6 +240,9 @@ class GenreSchema(GenreBase):
 class BookGenreSchema(BookGenreBase):
     pass
 
+class UserSchema(UserBase):
+    pass
+
 class DeleteSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -202,3 +250,13 @@ class DeleteSchema(BaseModel):
         default="Data deleted successfully!"
         )
 
+class TokenBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    username: str | None = None
