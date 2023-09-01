@@ -36,15 +36,19 @@ Base = declarative_base()
 
 # for authentication purpose.
 SECRET_KEY = os.environ.get("SECRET_KEY")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+REFRESH_KEY = os.environ.get("REFRESH_KEY")
+ALGORITHM = os.environ.get("ALGORITHM")
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_schema = OAuth2PasswordBearer(
-    tokenUrl="my_token",
-    scopes={
-        "me": "Read information about the current user.",
-        "items": "Read Items."
-    }
-)
+oauth2_schema = OAuth2PasswordBearer(tokenUrl="/api/token")
+
+# dependency.
+def get_database():
+    database = SessionLocal()
+
+    try:
+        yield database
+    finally:
+        database.close()

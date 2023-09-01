@@ -6,13 +6,13 @@ from fastapi import (
     Depends, 
     APIRouter,
     status,
-    HTTPException,
     )
 from sqlalchemy.orm import Session
 from app import (
     schemas, 
     config
     )
+from app.config import get_database
 from app.controllers import (
     author_controller,
     book_controller, 
@@ -23,21 +23,11 @@ from app.controllers import (
     )
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated
-from datetime import timedelta
-from app.config import ACCESS_TOKEN_EXPIRE_MINUTES
+from app.controllers.authentication_controller import get_current_user
 
 
 # define route.
 router = APIRouter()
-
-# dependency.
-def get_database():
-    database = config.SessionLocal()
-
-    try:
-        yield database
-    finally:
-        database.close()
 
 """
 BOOKS ROUTES!
@@ -374,13 +364,20 @@ BOOK GENRES ROUTES!
           summary="Create relationship between Books and Genres.",
           status_code=status.HTTP_201_CREATED
           )
-def create_book_genres(book_genre: schemas.BookGenreSchema, session: Session = Depends(get_database)):
+def create_book_genres(
+    book_genre: schemas.BookGenreSchema, 
+    session: Session = Depends(get_database),
+    auth: schemas.UserSchema = Depends(get_current_user)
+    ):
     """
+    **WARNING**: This endpoint needs access token, make sure you have an access token.
+
     Create relationship between Books and Genres.
 
     **NOTE**: Use this if book data and genre data have already been filled in or created.
     """
     return book_genre_controller.create_book_genres(
+        auth=auth,
         book_genre=book_genre,
         session=session
         )
@@ -393,8 +390,15 @@ def create_book_genres(book_genre: schemas.BookGenreSchema, session: Session = D
             summary="Read or get all book genres data.",
             status_code=status.HTTP_200_OK
             )
-def read_book_genres(session: Session =  Depends(get_database), skip: int = 0, limit: int = 100):
+def read_book_genres(
+    auth: schemas.UserSchema = Depends(get_current_user),
+    session: Session = Depends(get_database), 
+    skip: int = 0, 
+    limit: int = 100, 
+    ):
     """
+    **WARNING**: This endpoint needs access token, make sure you have an access token.
+
     Read or get all book genres data and paginate the data's with skip and limit query.
 
     **Parameters**:
@@ -402,6 +406,7 @@ def read_book_genres(session: Session =  Depends(get_database), skip: int = 0, l
     - **limit**: Maximum number of items to be returned. Default = 100.
     """
     return book_genre_controller.get_all_book_genres(
+        auth=auth,
         session=session,
         skip=skip,
         limit=limit
@@ -415,14 +420,21 @@ def read_book_genres(session: Session =  Depends(get_database), skip: int = 0, l
             summary="Read or get one book data base on book id",
             status_code=status.HTTP_200_OK
             )
-def read_book(book_id: str, session: Session = Depends(get_database)):
+def read_book(
+    book_id: str, 
+    session: Session = Depends(get_database),
+    auth: schemas.UserSchema = Depends(get_current_user)
+    ):
     """
+    **WARNING**: This endpoint needs access token, make sure you have an access token.
+
     Read or get book data using a JOIN statement with the BookGenres model. This endpoint requires book_id as a parameter.
 
     **Parameter**:
     - **book_id**: Identifier of book.
     """
     return book_genre_controller.get_book_data(
+        auth=auth,
         book_id=book_id,
         session=session
         )
@@ -435,14 +447,21 @@ def read_book(book_id: str, session: Session = Depends(get_database)):
             summary="Read or get one genre data base on genre id",
             status_code=status.HTTP_200_OK
             )
-def read_book(genre_id: str, session: Session = Depends(get_database)):
+def read_book(
+    genre_id: str, 
+    session: Session = Depends(get_database),
+    auth: schemas.UserSchema = Depends(get_current_user)
+    ):
     """
+    **WARNING**: This endpoint needs access token, make sure you have an access token.
+
     Read or get genre data using a JOIN statement with the BookGenres model. This endpoint requires genre_id as a parameter.
 
     **Parameter**:
     - **genre_id**: Identifier of genre.
     """
     return book_genre_controller.get_genre_data(
+        auth=auth,
         genre_id=genre_id,
         session=session
         )
@@ -457,7 +476,11 @@ USER ROUTES!
             summary="Read or get users data.",
             status_code=status.HTTP_200_OK
             )
-def read_users(session: Session = Depends(get_database), skip: int = 0, limit: int = 100):
+def read_users(
+    session: Session = Depends(get_database), 
+    skip: int = 0, 
+    limit: int = 100
+    ):
     return user_controller.get_all_users(
         session=session, 
         skip=skip, 
@@ -471,7 +494,10 @@ def read_users(session: Session = Depends(get_database), skip: int = 0, limit: i
              summary="Create one user data.", 
              status_code=status.HTTP_201_CREATED
              )
-def create_user(user: schemas.UserSchemaCreate, session: Session = Depends(get_database)):
+def create_user(
+    user: schemas.UserSchemaCreate, 
+    session: Session = Depends(get_database)
+    ):
     return user_controller.create_user(
         user=user, 
         session=session
@@ -497,7 +523,11 @@ def read_user(username: str, session: Session = Depends(get_database)):
               summary="Update one user data base on username.", 
               status_code=status.HTTP_200_OK
               )
-def update_user(username: str, user: schemas.UserSchemaUpdate, session: Session = Depends(get_database)):
+def update_user(
+    username: str, 
+    user: schemas.UserSchemaUpdate, 
+    session: Session = Depends(get_database)
+    ):
     return user_controller.update_user(
         username=username, 
         user=user, 
@@ -520,13 +550,24 @@ def delete_user(username: str, session: Session = Depends(get_database)):
 """
 AUTH ROUTES!
 """
-@router.post("/login", 
+@router.post("/api/token", 
              response_model=schemas.TokenBase, 
              tags=["authentications"], 
-             status_code=status.HTTP_200_OK
+             deprecated=False,
+             status_code=status.HTTP_200_OK,
+             summary="Create one access token."
              )
-def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], session: Session = Depends(get_database)):
-    return authentication_controller.login(
+def access_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()], 
+    session: Session = Depends(get_database)
+    ):
+    """
+    Create access token for execute protected routes.
+
+    **NOTE**: Make sure to input registered username and password.
+    """
+    return authentication_controller.get_access_token(
         form_data=form_data, 
         session=session
         )
+

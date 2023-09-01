@@ -36,14 +36,6 @@ tags_metadata = [
         "name": "book_genres",
         "description": "--|Operations with book genres|--"
     },
-    {
-        "name": "users",
-        "description": "--|Operations with users|--"
-    },
-    {
-        "name": "authentications",
-        "description": "--|Operations with authentication|--"
-    }
 ]
 
 # define the app.
@@ -53,7 +45,8 @@ app = FastAPI(
     summary="This use for manage Books data.", 
     debug=True,
     version="1.0.0",
-    openapi_tags=tags_metadata)
+    openapi_tags=tags_metadata,
+    separate_input_output_schemas=False)
 app.include_router(router)
 
 # load all variable from env file.

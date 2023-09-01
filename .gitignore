@@ -1,5 +1,6 @@
 # ignore all secret file
 
+__pycache__/
 .env
 books.db
 venv/

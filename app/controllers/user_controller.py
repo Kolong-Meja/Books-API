@@ -2,6 +2,11 @@
 
 """CRUD Logic for User"""
 
+"""
+NOTE: This is unused controller. The reason why this is not used in the API, 
+because it's too hard to develop it. Maybe in future i will finish it. 
+"""
+
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app import (
@@ -58,7 +63,7 @@ def delete_user(username: str, session: Session):
 
     if not database_user:
         raise HTTPException(status_code=404, detail=f"User '{username}' not found.")
-    
+
     session.delete(database_user)
     session.commit()
     session.close()

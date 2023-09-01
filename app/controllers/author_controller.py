@@ -53,9 +53,12 @@ def delete_author(name: str, session: Session):
 
     if not database_author:
         raise HTTPException(status_code=404, detail=f"'{name}' not found.")
-    
+
     session.delete(database_author)
     session.commit()
     return {
         "message": f"Author '{name}' data deleted successfully!"
     }
+
+
+
