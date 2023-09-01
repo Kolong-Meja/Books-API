@@ -12,7 +12,6 @@ from pydantic import (
     Field, 
     PrivateAttr, 
     ConfigDict,
-    ValidationError
     )
 from typing import List
 

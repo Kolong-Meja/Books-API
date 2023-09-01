@@ -8,10 +8,7 @@ from fastapi import (
     status,
     )
 from sqlalchemy.orm import Session
-from app import (
-    schemas, 
-    config
-    )
+from app import schemas
 from app.config import get_database
 from app.controllers import (
     author_controller,

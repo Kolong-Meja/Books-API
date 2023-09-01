@@ -8,14 +8,6 @@ import uvicorn
 from fastapi import FastAPI
 from app.routes import router
 from dotenv import load_dotenv
-from app.database.sql_tool import query
-from app.database.query import (
-    create_books_table_query,
-    create_authors_table_query,
-    create_genres_table_query,
-    create_book_genres_table_query,
-    create_users_table_query
-    )
 
 
 # include the tags metadata.
