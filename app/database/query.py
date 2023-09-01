@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS Books (
     title VARCHAR(255) NOT NULL UNIQUE,
     author_id VARCHAR(36),
     pages INTEGER NOT NULL,
+    synopsis TEXT NULL,
     publisher VARCHAR(255) NULL,
     published DATE DEFAULT '1970-01-01',
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -26,6 +27,7 @@ create_genres_table_query = """
 CREATE TABLE IF NOT EXISTS Genres (
     uuid VARCHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL UNIQUE,
+    description TEXT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (uuid)
 )
@@ -35,6 +37,9 @@ create_authors_table_query = """
 CREATE TABLE IF NOT EXISTS Authors (
     uuid VARCHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL UNIQUE,
+    birth_date DATE DEFAULT '1970-01-01',
+    nationality VARCHAR(255) NULL,
+    biography TEXT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (uuid)
 )
@@ -47,6 +52,16 @@ CREATE TABLE IF NOT EXISTS BookGenres (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT FK_BookGenre FOREIGN KEY (book_id) REFERENCES Books(uuid) ON DELETE CASCADE,
     CONSTRAINT FK_GenreBook FOREIGN KEY (genre_id) REFERENCES Genres(uuid) ON DELETE CASCADE
+)
+"""
+
+create_users_table_query = """
+CREATE TABLE IF NOT EXISTS Users (
+    uuid VARCHAR(36) NOT NULL,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (uuid)
 )
 """
 # END OF CREATE STATEMENT AREA!

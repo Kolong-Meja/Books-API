@@ -45,7 +45,7 @@ def update_genre(name: str, genre: schemas.GenreSchemaUpdate, session: Session):
 
     for key, value in genre_data.items():
         setattr(database_genre, key, value)
-    
+
     session.commit()
     session.refresh(database_genre)
     session.close()
@@ -56,7 +56,7 @@ def delete_genre(name: str, session: Session):
 
     if not database_genre:
         raise HTTPException(status_code=404, detail=f"'{name}' not found.")
-    
+
     session.delete(database_genre)
     session.commit()
     session.close()

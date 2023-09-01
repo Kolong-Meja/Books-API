@@ -13,7 +13,8 @@ from app.database.query import (
     create_books_table_query,
     create_authors_table_query,
     create_genres_table_query,
-    create_book_genres_table_query
+    create_book_genres_table_query,
+    create_users_table_query
     )
 
 
@@ -34,7 +35,7 @@ tags_metadata = [
     {
         "name": "book_genres",
         "description": "--|Operations with book genres|--"
-    }
+    },
 ]
 
 # define the app.
@@ -44,7 +45,8 @@ app = FastAPI(
     summary="This use for manage Books data.", 
     debug=True,
     version="1.0.0",
-    openapi_tags=tags_metadata)
+    openapi_tags=tags_metadata,
+    separate_input_output_schemas=False)
 app.include_router(router)
 
 # load all variable from env file.
@@ -56,4 +58,4 @@ dev_port = int(os.environ.get("APP_DEV_PORT"))
 
 # run the program.
 if __name__ == "__main__":
-    uvicorn.run(app, host=dev_host, port=dev_port)
+    uvicorn.run("__main__:app", host=dev_host, port=dev_port, use_colors=True, reload=True)

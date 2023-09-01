@@ -11,7 +11,8 @@ from pydantic import (
     BaseModel, 
     Field, 
     PrivateAttr, 
-    ConfigDict
+    ConfigDict,
+    ValidationError
     )
 from typing import List
 
@@ -38,6 +39,10 @@ class BookBase(BaseModel):
     pages: int = Field(
         title="Pages",
         description="Number of book pages.",
+        )
+    synopsis: str = Field(
+        title="Synopsis",
+        description="Synopsis of the book"
         )
     publisher: str = Field(
         title="Publisher",
@@ -78,6 +83,11 @@ class BookSchemaUpdate(BaseModel):
         title="Pages",
         description="Number of book pages.",
         )
+    synopsis: str | None = Field(
+        default=None,
+        title="Synopsis",
+        description="Synopsis of the book"
+        )
     publisher: str | None = Field(
         default=None,
         title="Publisher",
@@ -107,6 +117,20 @@ class AuthorBase(BaseModel):
         description="Name of the author.",
         max_length=255
         )
+    birth_date: date = Field(
+        default=datetime(year=1970, month=1, day=1),
+        title="Birthdate",
+        description="Birthdate of author."
+        )
+    nationalty: str = Field(
+        title="Nationality",
+        description="Nationality of the author.",
+        max_length=255
+        )
+    biography: str = Field(
+        title="Biography",
+        description="Biography of the author."
+        )
     timestamp: datetime = Field(
         default=datetime.now(),
         title="Timestamp",
@@ -125,6 +149,22 @@ class AuthorSchemaUpdate(BaseModel):
         description="Name of the author.",
         max_length=255
         )
+    birth_date: date | None = Field(
+        default=datetime(year=1970, month=1, day=1),
+        title="Birthdate",
+        description="Birthdate of author."
+        )
+    nationalty: str | None = Field(
+        default=None,
+        title="Nationality",
+        description="Nationality of the author.",
+        max_length=255
+        )
+    biography: str | None = Field(
+        default=None,
+        title="Biography",
+        description="Biography of the author."
+        )
     _timestamp: datetime | None = PrivateAttr(
         default_factory=datetime.utcnow
     )
@@ -139,6 +179,10 @@ class GenreBase(BaseModel):
         title="Name",
         description="Name of the genre.",
         max_length=255
+        )
+    description: str = Field(
+        title="Description",
+        description="Description of the genre."
         )
     timestamp: datetime = Field(
         default=datetime.utcnow(),
@@ -157,6 +201,11 @@ class GenreSchemaUpdate(BaseModel):
         title="Name",
         description="Name of the genre.",
         max_length=255
+        )
+    description: str | None = Field(
+        default=None,
+        title="Description",
+        description="Description of the genre."
         )
     _timestamp: datetime = PrivateAttr(
         default_factory=datetime.utcnow
@@ -179,6 +228,50 @@ class BookGenreBase(BaseModel):
         description="Datetime of book genre data changes."
         )
 
+class UserBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    _uuid: str = PrivateAttr(
+        default_factory=lambda: uuid_val().hex
+    )
+    username: str = Field(
+        title="Username",
+        description="Name of user that will be used for authentication.",
+        max_length=255
+        )
+    password: str = Field(
+        title="Password",
+        description="Password of user that used for authentication.",
+        max_length=255
+        )
+    timestamp: datetime = Field(
+        default=datetime.utcnow(),
+        title="Timestamp",
+        description="Datetime of user data changes."
+        )
+
+class UserSchemaCreate(UserBase):
+    pass
+
+class UserSchemaUpdate(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    username: str | None = Field(
+        default=None,
+        title="Username",
+        description="Name of user that will be used for authentication.",
+        max_length=255
+        )
+    password: str | None = Field(
+        default=None,
+        title="Password",
+        description="Password of user that used for authentication.",
+        max_length=255
+        )
+    _timestamp: datetime = PrivateAttr(
+        default_factory=datetime.utcnow
+        )
+
 class BookSchema(BookBase):
     author: AuthorBase
     genres: List[GenreBase]
@@ -195,6 +288,9 @@ class GenreSchema(GenreBase):
 class BookGenreSchema(BookGenreBase):
     pass
 
+class UserSchema(UserBase):
+    pass
+
 class DeleteSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -202,3 +298,14 @@ class DeleteSchema(BaseModel):
         default="Data deleted successfully!"
         )
 
+class TokenBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    
+    username: str | None = None
+    scopes: list[str] = []
