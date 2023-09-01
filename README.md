@@ -33,3 +33,15 @@ Info: if you want more information about this library, see https://rich.readthed
 * **python-dotenv**
 
 Info: if you want more information about this library, see https://pypi.org/project/python-dotenv/
+
+* **python-jose**
+
+Info: if you want more information about this library, see https://pypi.org/project/python-jose/
+
+* **passlib**
+
+Info: if you want more information about this library, see https://pypi.org/project/passlib/
+
+* **python-multipart**
+
+Info: if you want more information about this library, see https://pypi.org/project/python-multipart/
