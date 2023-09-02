@@ -25,8 +25,11 @@ def get_all_books(session: Session, skip: int = 0, limit: int = 100):
 def create_book(author_id: str, book: schemas.BookSchemaCreate, session: Session):
     database_book = models.Book(
         uuid=book._uuid,
+        isbn=book.isbn,
         title=book.title,
         pages=book.pages,
+        synopsis=book.synopsis,
+        publisher=book.publisher,
         published=book.published,
         timestamp=book.timestamp,
         author_id=author_id

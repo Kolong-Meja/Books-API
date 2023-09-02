@@ -2,7 +2,7 @@
 
 """Model for Books table."""
 
-from datetime import datetime
+from datetime import datetime, date
 from sqlalchemy import (
     Column, 
     Integer, 
@@ -47,7 +47,7 @@ class Author(Base):
 
     uuid = Column(String(36), primary_key=True)
     name = Column(String(255), unique=True, nullable=False)
-    birth_date = Column(Date, default=datetime(year=1970, month=1, day=1))
+    birth_date = Column(Date, default=date(year=1970, month=1, day=1))
     nationality = Column(String(255), nullable=True)
     biography = Column(Text, nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow())
@@ -65,7 +65,6 @@ class Genre(Base):
 
     # create relationship.
     books = relationship("Book", secondary="BookGenres", back_populates="genres")
-
 
 class User(Base):
     __tablename__ = "Users"
