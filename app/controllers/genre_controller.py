@@ -26,6 +26,7 @@ def create_genre(genre: schemas.GenreSchemaCreate, session: Session):
     database_genre = models.Genre(
         uuid=genre._uuid,
         name=genre.name,
+        description=genre.description,
         timestamp=genre.timestamp
     )
 

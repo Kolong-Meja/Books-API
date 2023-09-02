@@ -117,11 +117,11 @@ class AuthorBase(BaseModel):
         max_length=255
         )
     birth_date: date = Field(
-        default=datetime(year=1970, month=1, day=1),
+        default=date(year=1970, month=1, day=1),
         title="Birthdate",
         description="Birthdate of author."
         )
-    nationalty: str = Field(
+    nationality: str = Field(
         title="Nationality",
         description="Nationality of the author.",
         max_length=255
@@ -149,11 +149,11 @@ class AuthorSchemaUpdate(BaseModel):
         max_length=255
         )
     birth_date: date | None = Field(
-        default=datetime(year=1970, month=1, day=1),
+        default=date(year=1970, month=1, day=1),
         title="Birthdate",
         description="Birthdate of author."
         )
-    nationalty: str | None = Field(
+    nationality: str | None = Field(
         default=None,
         title="Nationality",
         description="Nationality of the author.",

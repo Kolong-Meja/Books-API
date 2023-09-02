@@ -25,6 +25,9 @@ def create_author(author: schemas.AuthorSchemaCreate, session: Session):
     database_author = models.Author(
         uuid=author._uuid,
         name=author.name,
+        birth_date=author.birth_date,
+        nationality=author.nationality,
+        biography=author.biography,
         timestamp=author.timestamp
         )
     session.add(database_author)

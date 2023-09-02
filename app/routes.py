@@ -56,7 +56,7 @@ def read_books(session: Session = Depends(get_database), skip: int = 0, limit: i
           response_model=schemas.BookBase, 
           tags=["books"],
           deprecated=False,
-          summary="Create one new book data.",
+          summary="Create relationship between book and author, plus create one book data.",
           status_code=status.HTTP_201_CREATED
           )
 def create_book(author_id: str, book: schemas.BookSchemaCreate, session: Session = Depends(get_database)):
