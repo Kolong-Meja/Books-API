@@ -8,40 +8,50 @@ This projects have a lots modules or packagaes for creation of this project. The
 
 * **fastapi**
 
-Info: if you want more information about this library, see https://fastapi.tiangolo.com/
+> **Note**
+if you want more information about this library, see https://fastapi.tiangolo.com/
 
 * **pydantic**
 
-Info: if you want more information about this library, see https://docs.pydantic.dev/latest/
+> **Note**
+if you want more information about this library, see https://docs.pydantic.dev/latest/
 
 * **uvicorn**
 
-Info: if you want more information about this library, see https://www.uvicorn.org/
+> **Note**
+if you want more information about this library, see https://www.uvicorn.org/
 
 * **SQLAlchemy**
 
-Info: if you want more information about this library, see https://www.sqlalchemy.org/
+> **Note**
+if you want more information about this library, see https://www.sqlalchemy.org/
 
 * **psycopg2-binary**
 
-Info: if you want more information about this library, see https://pypi.org/project/psycopg2-binary/
+> **Note**
+if you want more information about this library, see https://pypi.org/project/psycopg2-binary/
 
 * **rich**
 
-Info: if you want more information about this library, see https://rich.readthedocs.io/en/stable/introduction.html
+> **Note**
+if you want more information about this library, see https://rich.readthedocs.io/en/stable/introduction.html
 
 * **python-dotenv**
 
-Info: if you want more information about this library, see https://pypi.org/project/python-dotenv/
+> **Note**
+if you want more information about this library, see https://pypi.org/project/python-dotenv/
 
 * **python-jose**
 
-Info: if you want more information about this library, see https://pypi.org/project/python-jose/
+> **Note**
+if you want more information about this library, see https://pypi.org/project/python-jose/
 
 * **passlib**
 
-Info: if you want more information about this library, see https://pypi.org/project/passlib/
+> **Note** 
+if you want more information about this library, see https://pypi.org/project/passlib/
 
 * **python-multipart**
 
-Info: if you want more information about this library, see https://pypi.org/project/python-multipart/
+> **Note**
+if you want more information about this library, see https://pypi.org/project/python-multipart/
