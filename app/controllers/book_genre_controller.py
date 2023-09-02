@@ -26,12 +26,8 @@ def create_book_genres(
         auth: schemas.UserSchema = Depends(get_current_user)
         ):
     if auth:
-        database_book = session.query(models.Book)\
-            .filter(models.Book.uuid == book_genre.book_id)\
-            .first()
-        database_genre = session.query(models.Genre)\
-            .filter(models.Genre.uuid == book_genre.genre_id)\
-            .first()
+        database_book = session.query(models.Book).filter(models.Book.uuid == book_genre.book_id).first()
+        database_genre = session.query(models.Genre).filter(models.Genre.uuid == book_genre.genre_id).first()
         database_book_genre = models.BookGenre(
             book_id=database_book.uuid,
             genre_id=database_genre.uuid
@@ -48,31 +44,19 @@ def get_book_data(
         session: Session, 
         auth: schemas.UserSchema = Depends(get_current_user)
         ):
-    if not session.query(models.Book)\
-        .join(models.BookGenre, models.BookGenre.book_id == book_id)\
-        .order_by(models.BookGenre.timestamp.asc())\
-        .first():
+    if not session.query(models.Book).join(models.BookGenre, models.BookGenre.book_id == book_id).order_by(models.BookGenre.timestamp.asc()).first():
         raise HTTPException(status_code=404, detail=f"'{book_id}' not found.")
 
     if auth:
-        return session.query(models.Book)\
-            .join(models.BookGenre, models.BookGenre.book_id == book_id)\
-            .order_by(models.BookGenre.timestamp.asc())\
-            .first()
+        return session.query(models.Book).join(models.BookGenre, models.BookGenre.book_id == book_id).order_by(models.BookGenre.timestamp.asc()).first()
 
 def get_genre_data(
         genre_id: str, 
         session: Session, 
         auth: schemas.UserSchema = Depends(get_current_user)
         ):
-    if not session.query(models.Genre)\
-        .join(models.BookGenre, models.BookGenre.genre_id == genre_id)\
-        .order_by(models.BookGenre.timestamp.asc())\
-        .first():
+    if not session.query(models.Genre).join(models.BookGenre, models.BookGenre.genre_id == genre_id).order_by(models.BookGenre.timestamp.asc()).first():
         raise HTTPException(status_code=404, detail=f"'{genre_id}' not found.")
 
     if auth:
-        return session.query(models.Genre)\
-            .join(models.BookGenre, models.BookGenre.genre_id == genre_id)\
-            .order_by(models.BookGenre.timestamp.asc())\
-            .first()
+        return session.query(models.Genre).join(models.BookGenre, models.BookGenre.genre_id == genre_id).order_by(models.BookGenre.timestamp.asc()).first()

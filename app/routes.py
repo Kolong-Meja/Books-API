@@ -478,6 +478,13 @@ def read_users(
     skip: int = 0, 
     limit: int = 100
     ):
+    """
+    Read or get users data from database.
+
+    **Parameters**
+    - **skip**: Skip certain number of item before returning the items. Default = 0.
+    - **limit**: Maximum number of items to be returned. Default = 100.
+    """
     return user_controller.get_all_users(
         session=session, 
         skip=skip, 
@@ -495,6 +502,9 @@ def create_user(
     user: schemas.UserSchemaCreate, 
     session: Session = Depends(get_database)
     ):
+    """
+    Create one user data.
+    """
     return user_controller.create_user(
         user=user, 
         session=session
@@ -508,6 +518,12 @@ def create_user(
             status_code=status.HTTP_200_OK
             )
 def read_user(username: str, session: Session = Depends(get_database)):
+    """
+    Read or get one user data from database.
+
+    **Parameter**:
+    - **username**: The name of author to be returned.
+    """
     return user_controller.get_user(
         username=username, 
         session=session
@@ -525,6 +541,12 @@ def update_user(
     user: schemas.UserSchemaUpdate, 
     session: Session = Depends(get_database)
     ):
+    """
+    Update or change one user data from database.
+
+    **Parameter**:
+    - **username**: The name of user to be returned.
+    """
     return user_controller.update_user(
         username=username, 
         user=user, 
@@ -539,6 +561,12 @@ def update_user(
             status_code=status.HTTP_200_OK
             )
 def delete_user(username: str, session: Session = Depends(get_database)):
+    """
+    Delete one user data from database.
+
+    **Parameter**:
+    - **username**: The name of genre to be deleted.
+    """
     return user_controller.delete_user(
         username=username, 
         session=session

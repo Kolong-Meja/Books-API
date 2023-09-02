@@ -32,8 +32,10 @@ tags_metadata = [
 
 # define the app.
 app = FastAPI(
-    title="Books API", 
-    description="Is an API to create, get, view and manage all data related to Books. You can be as free as possible to do all that here.", 
+    title="Books REST API", 
+    description="""Is an API to create, get, 
+    view and manage all data related to Books. 
+    You can be as free as possible to do all that here.""", 
     summary="This use for manage Books data.", 
     debug=True,
     version="1.0.0",
