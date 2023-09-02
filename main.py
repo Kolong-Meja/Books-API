@@ -40,7 +40,12 @@ app = FastAPI(
     debug=True,
     version="1.0.0",
     openapi_tags=tags_metadata,
-    separate_input_output_schemas=False)
+    separate_input_output_schemas=False,
+    license_info={
+        "name": "GNU General Public License version 3",
+        "url": "https://www.gnu.org/licenses/gpl-3.0.html"
+        },
+    )
 app.include_router(router)
 
 # load all variable from env file.
