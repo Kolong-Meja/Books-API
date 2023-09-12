@@ -103,7 +103,11 @@ class BookSchemaUpdate(BaseModel):
         )
 
 class BookAuthorSchemaUpdate(BaseModel):
-    author_id: str
+    author_id: str = Field(
+        title="UUID", 
+        description="""Identifier of authors data | **NOTE**: Check first \
+        the UUID of authors to make changes."""
+        )
 
 class AuthorBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -136,6 +140,37 @@ class AuthorBase(BaseModel):
         description="Datetime of author data changes.",
         )
 
+# for displaying UUID of authors data
+class AuthorSchema(AuthorBase):
+    uuid: str = Field(
+        default_factory=lambda: uuid_val().hex,
+        title="UUID",
+        description="Identifier for authors data."
+        )
+    name: str = Field(
+        title="Name",
+        description="Name of the author.",
+        max_length=255
+        )
+    birth_date: date = Field(
+        default=date(year=1970, month=1, day=1),
+        title="Birthdate",
+        description="Birthdate of author."
+        )
+    nationality: str = Field(
+        title="Nationality",
+        description="Nationality of the author.",
+        max_length=255
+        )
+    biography: str = Field(
+        title="Biography",
+        description="Biography of the author."
+        )
+    timestamp: datetime = Field(
+        default=datetime.now(),
+        title="Timestamp",
+        description="Datetime of author data changes.",
+        )
 class AuthorSchemaCreate(AuthorBase):
     pass
 
@@ -285,11 +320,11 @@ class UserSchemaUpdate(BaseModel):
         )
 
 class BookSchema(BookBase):
-    author: AuthorBase
+    author: AuthorSchema
     genres: List[GenreBase]
 
 class BookAuthorSchema(BookBase):
-    author: AuthorBase
+    author: AuthorSchema
 
 class AuthorSchema(AuthorBase):
     books: List[BookBase]
@@ -298,7 +333,43 @@ class GenreSchema(GenreBase):
     books: List[BookBase]
 
 class BookGenreSchema(BookGenreBase):
-    pass
+    uuid: str = Field(
+        default_factory=lambda: uuid_val().hex,
+        title="UUID",
+        description="Identifier of book genres data"
+        )
+    book_id: str = Field(
+        title="Book ID", 
+        description="Book identifiers."
+        )
+    genre_id: str = Field(
+        title="Genre ID",
+        description="Genre identifiers."
+        )
+    timestamp: datetime = Field(
+        default=datetime.utcnow(),
+        title="Timestamp",
+        description="Datetime of book genre data changes."
+        )
+
+class BookGenreUpdateSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    book_id: str | None = Field(
+        default=None,
+        title="Book ID", 
+        description="Book identifiers."
+        )
+    genre_id: str | None = Field(
+        default=None,
+        title="Genre ID",
+        description="Genre identifiers."
+        )
+    timestamp: datetime | None = Field(
+        default=datetime.utcnow(),
+        title="Timestamp",
+        description="Datetime of book genre data changes."
+        )
 
 class UserSchema(UserBase):
     pass

@@ -147,6 +147,10 @@ def update_author_by_book(title: str, book: schemas.BookAuthorSchemaUpdate, sess
 
     **Parameter**
     - **title**: The title name of the book.
+
+    **Another NOTE**: For check author UUID, \
+    jump directly to the endpoint **/api/book/{title}**, \
+    there you can get the author UUID and also the title of the book
     """
     return book_controller.update_author_by_title(
         title=title,
@@ -355,7 +359,7 @@ BOOK GENRES ROUTES!
 """
 # NOTE: for response_model argument, use schemas!
 @router.post("/api/book_genres",
-          response_model=schemas.BookGenreSchema,
+          response_model=schemas.BookGenreBase,
           tags=["book_genres"],
           deprecated=False,
           summary="Create relationship between Books and Genres.",
@@ -409,6 +413,34 @@ def read_book_genres(
         limit=limit
         )
 
+@router.patch("/api/book_genres/{book_genre_id}", 
+            response_model=schemas.BookGenreBase, 
+            tags=["book_genres"],
+            deprecated=False,
+            summary="Update one book genre data.",
+            status_code=status.HTTP_200_OK
+            )
+def update_book_genre(
+    book_genre_id: str,
+    book_genre: schemas.BookGenreUpdateSchema,
+    auth: schemas.UserSchema = Depends(get_current_user), 
+    session: Session = Depends(get_database),
+    ):
+    """
+    **WARNING**: This endpoint needs access token, make sure you have an access token.
+
+    Update one data from the BookGenres table.
+
+    **Parameters**:
+    - **book_genre_id**: Identifier of the book genres or it called UUID.
+    """
+    return book_genre_controller.update_book_genre(
+        book_genre_id=book_genre_id, 
+        book_genre=book_genre, 
+        session=session, 
+        auth=auth
+        )
+
 @router.delete("/api/book_genres/{book_genre_id}", 
                 response_model=schemas.DeleteSchema,
                 tags=["book_genres"],
@@ -421,6 +453,14 @@ def delete_book_genre(
     session: Session = Depends(get_database),
     auth: schemas.UserSchema = Depends(get_current_user),
     ):
+    """
+    **WARNING**: This endpoint needs access token, make sure you have an access token.
+
+    Delete or remove one data from BookGenres table.
+
+    **Parameters**:
+    - **book_genre_id**: Identifier of the book genres or it called UUID.
+    """
     return book_genre_controller.delete_book_genre(
         book_genre_id=book_genre_id, 
         session=session, 
