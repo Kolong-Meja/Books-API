@@ -14,10 +14,11 @@ from app import (
 Make sure all of this CRUD logic are used in route.
 """
 def get_book(title: str, session: Session):
-    if not session.query(models.Book).filter(models.Book.title == title).first():
+    data = session.query(models.Book).filter(models.Book.title == title).first()
+    if not data:
         raise HTTPException(status_code=404, detail=f"'{title}' not found.")
 
-    return session.query(models.Book).filter(models.Book.title == title).first()
+    return data
 
 def get_all_books(session: Session, skip: int = 0, limit: int = 100):
     return session.query(models.Book).offset(skip).limit(limit).all()

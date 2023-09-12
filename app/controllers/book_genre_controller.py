@@ -43,7 +43,7 @@ def create_book_genres(
 
 def update_book_genre(
         book_genre_id: str,
-        book_genre: schemas.BookGenreSchema,
+        book_genre: schemas.BookGenreUpdateSchema,
         session: Session,
         auth: schemas.UserSchema = Depends(get_current_user)
         ):
@@ -53,7 +53,7 @@ def update_book_genre(
         if not data:
             raise HTTPException(status_code=404, detail=f"Book Genre with ID '{book_genre_id}' not found.")
 
-        data = book_genre.model_dump(exclude_unset=False)
+        data = book_genre.model_dump(exclude_unset=True)
 
         for key, value in data.items():
             setattr(database_book_genre, key, value)

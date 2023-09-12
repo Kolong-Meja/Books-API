@@ -56,3 +56,50 @@ def get_database():
         yield database
     finally:
         database.close()
+    
+# feature for API
+app_description = """
+Is a Restful API for managing book data, etc. \
+Here you can CREATE, UPDATE, DELETE, and READ all data related to the book. \
+For the record, each endpoint does not always return a UUID or ID (string), \
+this is done for data security. However, there are some endpoints that must use UUID or ID (string) from data, \
+so you can check these specific endpoints.
+
+Endpoints that respond to UUID returns include:
+- **GET /api/book/{title}**
+- **POST /api/book_genres**
+- **GET /api/book_genres**
+- **PATCH /api/book_genres/{book_genre_id}**
+
+This Restful API also fully supports the use of Access Tokens for Authorization or Authentication. \
+There are several endpoints that require an Access Token, most of which are all endpoints under the **book_genres** label. \
+So pay close attention to each endpoint whether it requires an Access Token or not.
+"""
+
+# include the tags metadata.
+tags_metadata = [
+    {
+        "name": "books",
+        "description": "Operations with books"
+    },
+    {
+        "name": "authors",
+        "description": "Operations with authors"
+    },
+    {
+        "name": "genres",
+        "description": "Operations with genres"
+    },
+    {
+        "name": "book_genres",
+        "description": "Operations with book genres"
+    },
+    {
+        "name": "users",
+        "description": "Operations with users"
+    },
+    {
+        "name": "authentications",
+        "description": "Operations with authentications"
+    }
+]

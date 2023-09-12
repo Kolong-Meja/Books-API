@@ -9,37 +9,16 @@ from fastapi import FastAPI
 from app.routes import router
 from dotenv import load_dotenv
 from app.config import (
+    app_description,
+    tags_metadata,
     DEV_HOST, 
     DEV_PORT
     )
 
-
-# include the tags metadata.
-tags_metadata = [
-    {
-        "name": "books",
-        "description": "--|Operations with books|--"
-    },
-    {
-        "name": "authors",
-        "description": "--|Operations with authors|--"
-    },
-    {
-        "name": "genres",
-        "description": "--|Operations with genres|--"
-    },
-    {
-        "name": "book_genres",
-        "description": "--|Operations with book genres|--"
-    },
-]
-
 # define the app.
 app = FastAPI(
     title="Books REST API", 
-    description="""Is an API to create, get, 
-    view and manage all data related to Books. 
-    You can be as free as possible to do all that here.""", 
+    description=app_description, 
     summary="This use for manage Books data.", 
     debug=True,
     version="1.0.0",
