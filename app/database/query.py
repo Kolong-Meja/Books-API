@@ -47,9 +47,11 @@ CREATE TABLE IF NOT EXISTS Authors (
 
 create_book_genres_table_query = """
 CREATE TABLE IF NOT EXISTS BookGenres (
+    uuid VARCHAR(36) NOT NULL,
     book_id VARCHAR(36),
     genre_id VARCHAR(36),
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (uuid),
     CONSTRAINT FK_BookGenre FOREIGN KEY (book_id) REFERENCES Books(uuid) ON DELETE CASCADE,
     CONSTRAINT FK_GenreBook FOREIGN KEY (genre_id) REFERENCES Genres(uuid) ON DELETE CASCADE
 )
@@ -60,6 +62,7 @@ CREATE TABLE IF NOT EXISTS Users (
     uuid VARCHAR(36) NOT NULL,
     username VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
+    description TEXT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (uuid)
 )
@@ -86,15 +89,3 @@ VALUES
 """
 # END OF INSERT STATEMENT AREA!
 
-# DELETE STATEMENT AREA!
-delete_all_books_data_query = """DELETE FROM Books"""
-# END OF DELETE STATEMENT AREA!
-
-
-# SELECT STATEMENT AREA!
-select_all_books_data_query = """SELECT * FROM Books"""
-# END OF SELECT STATEMENT AREA!
-
-# DROP TABLE STATEMENT AREA!
-drop_books_table_query = """DROP TABLE IF EXISTS Books"""
-#END OF DROP TABLE STATEMENT AREA!

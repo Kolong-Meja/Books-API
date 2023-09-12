@@ -8,6 +8,10 @@ import uvicorn
 from fastapi import FastAPI
 from app.routes import router
 from dotenv import load_dotenv
+from app.config import (
+    DEV_HOST, 
+    DEV_PORT
+    )
 
 
 # include the tags metadata.
@@ -48,13 +52,6 @@ app = FastAPI(
     )
 app.include_router(router)
 
-# load all variable from env file.
-load_dotenv()
-
-# get host and port from env file.
-dev_host = os.environ.get("APP_DEV_HOST")
-dev_port = int(os.environ.get("APP_DEV_PORT"))
-
 # run the program.
 if __name__ == "__main__":
-    uvicorn.run("__main__:app", host=dev_host, port=dev_port, use_colors=True, reload=True)
+    uvicorn.run("__main__:app", host=DEV_HOST, port=DEV_PORT, use_colors=True, reload=True)

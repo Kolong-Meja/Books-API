@@ -18,7 +18,8 @@ def get_all_book_genres(
         limit: int = 100,
         auth: schemas.UserSchema = Depends(get_current_user),
         ):
-    if auth: return session.query(models.BookGenre).offset(skip).limit(limit).all()
+    data = session.query(models.BookGenre).offset(skip).limit(limit).all()
+    if auth: return data
 
 def create_book_genres(
         book_genre: schemas.BookGenreSchema, 
@@ -29,6 +30,7 @@ def create_book_genres(
         database_book = session.query(models.Book).filter(models.Book.uuid == book_genre.book_id).first()
         database_genre = session.query(models.Genre).filter(models.Genre.uuid == book_genre.genre_id).first()
         database_book_genre = models.BookGenre(
+            uuid=book_genre._uuid,
             book_id=database_book.uuid,
             genre_id=database_genre.uuid
             )
@@ -39,24 +41,43 @@ def create_book_genres(
         session.close()
         return database_book_genre
 
-def get_book_data(
-        book_id: str, 
-        session: Session, 
+def update_book_genre(
+        book_genre_id: str,
+        book_genre: schemas.BookGenreSchema,
+        session: Session,
         auth: schemas.UserSchema = Depends(get_current_user)
         ):
-    if not session.query(models.Book).join(models.BookGenre, models.BookGenre.book_id == book_id).order_by(models.BookGenre.timestamp.asc()).first():
-        raise HTTPException(status_code=404, detail=f"'{book_id}' not found.")
-
     if auth:
-        return session.query(models.Book).join(models.BookGenre, models.BookGenre.book_id == book_id).order_by(models.BookGenre.timestamp.asc()).first()
+        database_book_genre = session.query(models.BookGenre).filter(models.BookGenre.uuid == book_genre_id).first()
 
-def get_genre_data(
-        genre_id: str, 
-        session: Session, 
+        if not data:
+            raise HTTPException(status_code=404, detail=f"Book Genre with ID '{book_genre_id}' not found.")
+
+        data = book_genre.model_dump(exclude_unset=False)
+
+        for key, value in data.items():
+            setattr(database_book_genre, key, value)
+
+        session.commit()
+        session.refresh(database_book_genre)
+        session.close()
+        return data
+
+def delete_book_genre(
+        book_genre_id: str,
+        session: Session,
         auth: schemas.UserSchema = Depends(get_current_user)
         ):
-    if not session.query(models.Genre).join(models.BookGenre, models.BookGenre.genre_id == genre_id).order_by(models.BookGenre.timestamp.asc()).first():
-        raise HTTPException(status_code=404, detail=f"'{genre_id}' not found.")
-
     if auth:
-        return session.query(models.Genre).join(models.BookGenre, models.BookGenre.genre_id == genre_id).order_by(models.BookGenre.timestamp.asc()).first()
+        data = session.query(models.BookGenre).filter(models.BookGenre.uuid == book_genre_id).first()
+
+        if not data:
+            raise HTTPException(status_code=404, detail=f"Book Genre with id '{book_genre_id}' not found.")
+        
+        session.delete(data)
+        session.commit()
+        session.close()
+        return {
+            "message": "BookGenre deleted successfully!"
+        }
+

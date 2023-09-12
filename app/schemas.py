@@ -213,6 +213,9 @@ class GenreSchemaUpdate(BaseModel):
 class BookGenreBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     
+    _uuid: str = PrivateAttr(
+        default_factory=lambda: uuid_val().hex
+        )
     book_id: str = Field(
         title="Book ID", 
         description="Book identifiers."
@@ -243,6 +246,11 @@ class UserBase(BaseModel):
         description="Password of user that used for authentication.",
         max_length=255
         )
+    description: str | None = Field(
+        default=None, 
+        title="Description", 
+        description="Description of the user"
+        )
     timestamp: datetime = Field(
         default=datetime.utcnow(),
         title="Timestamp",
@@ -266,6 +274,11 @@ class UserSchemaUpdate(BaseModel):
         title="Password",
         description="Password of user that used for authentication.",
         max_length=255
+        )
+    description: str | None = Field(
+        default=None, 
+        title="Description", 
+        description="Description of the user."
         )
     _timestamp: datetime = PrivateAttr(
         default_factory=datetime.utcnow
