@@ -27,12 +27,12 @@ def create_book(author_id: str, book: schemas.BookSchemaCreate, session: Session
         uuid=book._uuid,
         isbn=book.isbn,
         title=book.title,
+        author_id=author_id,
         pages=book.pages,
         synopsis=book.synopsis,
         publisher=book.publisher,
         published=book.published,
         timestamp=book.timestamp,
-        author_id=author_id
         )
     session.add(database_book)
     session.commit()

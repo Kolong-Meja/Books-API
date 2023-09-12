@@ -44,6 +44,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="/api/token")
 
+# get host and port from env file.
+DEV_HOST = os.environ.get("APP_DEV_HOST")
+DEV_PORT = int(os.environ.get("APP_DEV_PORT"))
+
 # dependency.
 def get_database():
     database = SessionLocal()

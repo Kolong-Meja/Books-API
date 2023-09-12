@@ -27,6 +27,7 @@ def create_user(user: schemas.UserSchemaCreate, session: Session):
         uuid=user._uuid,
         username=user.username,
         password=password_hash(user.password),
+        description=user.description,
         timestamp=user.timestamp
     )
     session.add(database_user)
@@ -36,22 +37,25 @@ def create_user(user: schemas.UserSchemaCreate, session: Session):
     return database_user
 
 def get_user(username: str, session: Session):
-    if not session.query(models.User).filter(models.User.username == username).first():
+    data = session.query(models.User).filter(models.User.username == username).first()
+    if not data:
         raise HTTPException(status_code=404, detail=f"User '{username}' not found.")
-
-    return session.query(models.User).filter(models.User.username == username).first()
+        
+    return data
 
 def update_user(username: str, user: schemas.UserSchemaUpdate, session: Session):
     database_user = session.query(models.User).filter(models.User.username == username).first()
-
     if not database_user:
         raise HTTPException(status_code=404, detail=f"User '{username}' not found.")
 
-    new_username = user.username
+    # for password only
     hash_password = password_hash(user.password)
 
-    database_user.username = new_username
+    # update user data
+    database_user.username = user.username
     database_user.password = hash_password
+    database_user.description = user.description
+    database_user.timestamp = user._timestamp
 
     session.commit()
     session.refresh(database_user)
@@ -60,7 +64,6 @@ def update_user(username: str, user: schemas.UserSchemaUpdate, session: Session)
 
 def delete_user(username: str, session: Session):
     database_user = session.query(models.User).filter(models.User.username == username).first()
-
     if not database_user:
         raise HTTPException(status_code=404, detail=f"User '{username}' not found.")
 

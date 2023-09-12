@@ -20,8 +20,9 @@ from app.config import Base
 class BookGenre(Base):
     __tablename__ = "BookGenres"
 
-    book_id = Column("book_id", ForeignKey("Books.uuid"), primary_key=True)
-    genre_id = Column("genre_id", ForeignKey("Genres.uuid"), primary_key=True)
+    uuid = Column(String(36), primary_key=True, nullable=False)
+    book_id = Column("book_id", ForeignKey("Books.uuid"))
+    genre_id = Column("genre_id", ForeignKey("Genres.uuid"))
     timestamp = Column(DateTime, default=datetime.utcnow())
 
 # create your model in here!
@@ -72,4 +73,5 @@ class User(Base):
     uuid = Column(String(36), primary_key=True)
     username = Column(String(255), nullable=False, unique=True)
     password = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
     timestamp = Column(DateTime, default=datetime.utcnow())

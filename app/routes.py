@@ -409,58 +409,22 @@ def read_book_genres(
         limit=limit
         )
 
-# NOTE: for response_model argument, use schemas!
-@router.get("/api/book_genres/book/{book_id}",
-            response_model=schemas.BookSchema,
-            tags=["book_genres"],
-            deprecated=False,
-            summary="Read or get one book data base on book id",
-            status_code=status.HTTP_200_OK
-            )
-def read_book(
-    book_id: str, 
+@router.delete("/api/book_genres/{book_genre_id}", 
+                response_model=schemas.DeleteSchema,
+                tags=["book_genres"],
+                deprecated=False,
+                summary="Delete one book genre data",
+                status_code=status.HTTP_200_OK
+                )
+def delete_book_genre(
+    book_genre_id: str, 
     session: Session = Depends(get_database),
-    auth: schemas.UserSchema = Depends(get_current_user)
+    auth: schemas.UserSchema = Depends(get_current_user),
     ):
-    """
-    **WARNING**: This endpoint needs access token, make sure you have an access token.
-
-    Read or get book data using a JOIN statement with the BookGenres model. This endpoint requires book_id as a parameter.
-
-    **Parameter**:
-    - **book_id**: Identifier of book.
-    """
-    return book_genre_controller.get_book_data(
-        auth=auth,
-        book_id=book_id,
-        session=session
-        )
-
-# NOTE: for response_model argument, use schemas!
-@router.get("/api/book_genres/genre/{genre_id}",
-            response_model=schemas.GenreSchema,
-            tags=["book_genres"],
-            deprecated=False,
-            summary="Read or get one genre data base on genre id",
-            status_code=status.HTTP_200_OK
-            )
-def read_book(
-    genre_id: str, 
-    session: Session = Depends(get_database),
-    auth: schemas.UserSchema = Depends(get_current_user)
-    ):
-    """
-    **WARNING**: This endpoint needs access token, make sure you have an access token.
-
-    Read or get genre data using a JOIN statement with the BookGenres model. This endpoint requires genre_id as a parameter.
-
-    **Parameter**:
-    - **genre_id**: Identifier of genre.
-    """
-    return book_genre_controller.get_genre_data(
-        auth=auth,
-        genre_id=genre_id,
-        session=session
+    return book_genre_controller.delete_book_genre(
+        book_genre_id=book_genre_id, 
+        session=session, 
+        auth=auth
         )
 
 """
